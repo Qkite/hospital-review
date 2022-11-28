@@ -4,6 +4,8 @@ package com.example.hospitalreview.service;
 import com.example.hospitalreview.domain.User;
 import com.example.hospitalreview.domain.dto.UserDto;
 import com.example.hospitalreview.domain.dto.UserJoinRequest;
+import com.example.hospitalreview.exception.ErrorCode;
+import com.example.hospitalreview.exception.HospitalReviewAppException;
 import com.example.hospitalreview.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +23,7 @@ public class UserService {
         // userName이 중복되었으면 회원가입X -> Exception(예외) 발생
 
         userRepository.findByUserName(request.getUserName())
-                .ifPresent(user-> {throw new RuntimeException("해당 UserName이 중복됩니다.");});
-
+                .ifPresent(user-> {throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("UserName:%s", request.getUserName()));});
 
 
         

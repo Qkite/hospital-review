@@ -13,7 +13,7 @@ public class Response<T> {
     private String resultCode;
     private T result;
 
-    private static Response<Void> error(String resultCode){
+    public static Response<Void> error(String resultCode){
 
         return new Response(resultCode, null);
 
