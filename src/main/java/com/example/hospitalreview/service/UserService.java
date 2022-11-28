@@ -19,8 +19,12 @@ public class UserService {
     public UserDto join(UserJoinRequest request){
 
         // userName이 중복되었으면 회원가입X -> Exception(예외) 발생
+
         userRepository.findByUserName(request.getUserName())
-                .ifPresent(user-> new RuntimeException("해당 UserName이 중복됩니다."));
+                .ifPresent(user-> {throw new RuntimeException("해당 UserName이 중복됩니다.");});
+
+
+
         
         // save는 entity의 형태를 받음 -> entity로 변환해줌
         User savedUser = userRepository.save(request.toEntity());
