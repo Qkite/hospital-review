@@ -27,6 +27,5 @@ public class UserController {
         UserDto userDto = userService.join(userJoinRequest);
         return Response.success(new UserJoinResponse(userDto.getUserName(), userDto.getEmailAddress()));
 
-
     }
 }

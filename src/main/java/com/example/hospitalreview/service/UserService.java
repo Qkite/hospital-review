@@ -9,6 +9,7 @@ import com.example.hospitalreview.exception.HospitalReviewAppException;
 import com.example.hospitalreview.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
     public UserDto join(UserJoinRequest request){
 
@@ -28,7 +30,7 @@ public class UserService {
 
         
         // save는 entity의 형태를 받음 -> entity로 변환해줌
-        User savedUser = userRepository.save(request.toEntity());
+        User savedUser = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));
         log.info(savedUser.getUserName());
 
         return UserDto.builder()

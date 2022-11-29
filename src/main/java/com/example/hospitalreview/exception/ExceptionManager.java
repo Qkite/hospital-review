@@ -16,8 +16,6 @@ public class ExceptionManager {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Response.error(e.getMessage()));
 
-        // 메시지가 어떻게 넘어가지?
-
     }
 
     @ExceptionHandler(HospitalReviewAppException.class)
