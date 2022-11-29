@@ -7,8 +7,10 @@ import com.example.hospitalreview.domain.dto.UserJoinRequest;
 import com.example.hospitalreview.exception.ErrorCode;
 import com.example.hospitalreview.exception.HospitalReviewAppException;
 import com.example.hospitalreview.repository.UserRepository;
+import com.example.hospitalreview.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+
+
+    @Value("${jwt.token.secret}") 
+    private String secretKey;
+    // 어노테이션을 통해서 edit configuration에서 설정하는 환경변수나 yml에 환경 변수를 설정하여 넣어줄 수 있음
+    private Long expireTimeMs = Long.valueOf(1000*60*60);
 
     public UserDto join(UserJoinRequest request){
 
@@ -55,11 +63,9 @@ public class UserService {
             throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, "잘못된 비밀번호 입니다.");
         }
 
-
-
-        // 두 가지 중 예외가 발생하지 않았으면 token 발행
-
-
-        return "";
+        
+        // 두 가지 중 예외가 발생하지 않았으면 JWT 형식의 token 발행
+        // key를 그대로 집어넣으면 절대 안됨!!
+        return JwtTokenUtil.createToken(userName, secretKey, expireTimeMs);
     }
 }
