@@ -41,4 +41,25 @@ public class UserService {
     }
 
 
+    public String login(String userName, String password) {
+
+        // userName이 있는지 확인 -> 없으면 NOT_FOUND 에러
+
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(()-> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUNDED, String.format("%s는 가입되지 않은 사용자의 id입니다.", userName)
+        ));
+
+        // password가 일치하는지 확인
+
+        if(!encoder.matches(password, user.getPassword())){
+            throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, "잘못된 비밀번호 입니다.");
+        }
+
+
+
+        // 두 가지 중 예외가 발생하지 않았으면 token 발행
+
+
+        return "";
+    }
 }
